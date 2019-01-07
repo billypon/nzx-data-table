@@ -1,4 +1,4 @@
-import { Observable, of, from } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { NzxDataTableFns } from './data-table.interface';
 
@@ -34,8 +34,8 @@ export class NzxDataTableCore<T> {
     this.sortedItems = [];
     this.pageItems = null;
     this.loadingItems = true;
-    let dataItems: T[];
-    this.onLoadItems(state).subscribe(items => {
+    return new Observable(observer => {
+      this.onLoadItems(state).subscribe(items => {
         items.forEach(item => {
           const oldItem = oldItems.find(x => this.itemEqual(x, item));
           if (oldItem) {
@@ -49,9 +49,11 @@ export class NzxDataTableCore<T> {
         this.filterItems(this.filterState);
         this.sortItems();
         this.loadingItems = false;
-        dataItems = items;
-      });
-    return of(dataItems);
+        observer.next(this.dataItems);
+      },
+      err => observer.error(err),
+      () => observer.complete());
+    });
   }
 
   filterItems(filter?: any, items: T[] = this.dataItems): T[] {
@@ -125,7 +127,7 @@ export class NzxDataTableCore<T> {
   }
 
   onLoadItems(state?: any): Observable<T[]> {
-    return this.fns.load ? this.fns.load(state) : from([]);
+    return this.fns.load ? this.fns.load(state) : of([]);
   }
 
   onFilterItems(filter: any, items: T[]): T[] {
