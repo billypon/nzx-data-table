@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+process.cwd('..')
+
+require('shelljs/global');
+require('colors');
+
+echo('Start building...');
+
+echo('Start TSLint');
+exec('tslint -p tslint.json src/**/*.ts');
+echo('TSLint completed'.green);
+
+exec('rm -rf tmp');
+exec('cp -a src tmp');
+exec('rm -rf dist');
+
+echo('Start AoT compilation');
+if (exec('ngc -p tsconfig.json').code) {
+  echo('Error: AoT compilation failed'.red);
+  exit(1);
+}
+echo('AoT compilation completed'.green);
+
+exec('rm -rf tmp');
+
+echo('Start bundling');
+exec('rollup -c --silent');
+echo('Bundling completed'.green);
+
+echo('Start minification');
+exec('uglifyjs ./dist/bundles/nzx-data-table.umd.js -o ./dist/bundles/nzx-data-table.umd.min.js');
+echo('Minification completed'.green);
+
+var package = require('../package.json');
+delete package.scripts;
+delete package.devDependencies;
+require('fs').writeFileSync(__dirname + '/../dist/package.json', JSON.stringify(package, null, 2));
+exec('cp README.md dist');
+
+echo('End building');
