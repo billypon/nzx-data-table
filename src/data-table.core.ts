@@ -1,8 +1,8 @@
 import { Observable, of } from 'rxjs';
 
-import { NzxDataTableFns } from './data-table.interface';
+import { NzxDataTableFns } from './data-table.type';
 
-export class NzxDataTableCore<T> {
+export class NzxDataTableCore<T = any> {
   dataItems: T[] = [];
   filteredItems: T[] = [];
   sortedItems: T[] = [];
