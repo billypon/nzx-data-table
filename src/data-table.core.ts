@@ -28,13 +28,13 @@ export class NzxDataTableCore<T = any> {
   }
 
   loadItems(state?: any): Observable<T[]> {
-    const oldItems = this.dataItems;
-    this.dataItems = [];
-    this.filteredItems = [];
-    this.sortedItems = [];
-    this.pageItems = null;
-    this.loadingItems = true;
     return new Observable(observer => {
+      const oldItems = this.dataItems;
+      this.dataItems = [];
+      this.filteredItems = [];
+      this.sortedItems = [];
+      this.pageItems = null;
+      this.loadingItems = true;
       this.onLoadItems(state).subscribe(items => {
         items.forEach(item => {
           const oldItem = oldItems.find(x => this.itemEqual(x, item));
