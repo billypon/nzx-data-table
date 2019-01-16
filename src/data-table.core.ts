@@ -1,9 +1,21 @@
+import { Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
 import { NzxDataTableFns } from './data-table.type';
 
 export class NzxDataTableCore<T = any> {
+  @Input()
+  get checkedName(): string {
+    return this._checkedName;
+  }
+  set checkedName(value: string) {
+    if (value) {
+      this._checkedName = value.toString();
+    }
+  }
+  private _checkedName = 'checked';
+
   dataItems: T[] = [];
   filteredItems: T[] = [];
   sortedItems: T[] = [];
@@ -79,14 +91,14 @@ export class NzxDataTableCore<T = any> {
   }
 
   restoreState(item: T, oldItem: T): void {
-    (item as any).checked = (oldItem as any).checked;
+    (item as any)[this.checkedName] = (oldItem as any)[this.checkedName];
     if (this.fns.restore) {
       this.fns.restore(item, oldItem);
     }
   }
 
   cleanStatus(): void {
-    this.selectedItems.forEach(item => (item as any).checked = false);
+    this.selectedItems.forEach(item => (item as any)[this.checkedName] = false);
     this.selectedItems = [];
     this.currentItem = null;
     this.refreshStatus();
@@ -96,7 +108,7 @@ export class NzxDataTableCore<T = any> {
     const items = this.pageItems || this.dataItems;
     items.forEach(item => {
       if (this.onCheckItem(item)) {
-        (item as any).checked = value;
+        (item as any)[this.checkedName] = value;
       }
     });
     this.refreshStatus();
@@ -108,7 +120,7 @@ export class NzxDataTableCore<T = any> {
     let allChecked = !!items.length;
     let allUnChecked = true;
     items.forEach(item => {
-      const checked = (item as any).checked;
+      const checked = (item as any)[this.checkedName];
       if (checked) {
         allUnChecked = false;
         selectedItems.push(item);
