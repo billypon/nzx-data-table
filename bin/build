@@ -8,7 +8,10 @@ require('colors');
 echo('Start building...');
 
 echo('Start TSLint');
-exec('tslint -p tslint.json src/**/*.ts');
+if (exec('tslint -p tslint.json src/**/*.ts').code) {
+  echo('Error: TSLint failed'.red);
+  exit(1);
+}
 echo('TSLint completed'.green);
 
 exec('rm -rf tmp');
@@ -18,18 +21,26 @@ exec('rm -rf dist');
 echo('Start AoT compilation');
 if (exec('ngc -p tsconfig.json').code) {
   echo('Error: AoT compilation failed'.red);
-  exit(1);
+  exit(2);
 }
 echo('AoT compilation completed'.green);
 
+exec('mv dist tmp');
+exec('mv tmp/dist/src dist');
 exec('rm -rf tmp');
 
 echo('Start bundling');
-exec('rollup -c --silent');
+if (exec('rollup -c --silent').code) {
+  echo('Error: Bundle failed'.red);
+  exit(3);
+}
 echo('Bundling completed'.green);
 
 echo('Start minification');
-exec('uglifyjs ./dist/bundles/nzx-data-table.umd.js -o ./dist/bundles/nzx-data-table.umd.min.js');
+if (exec('uglifyjs ./dist/bundles/nzx-data-table.umd.js -o ./dist/bundles/nzx-data-table.umd.min.js').code) {
+  echo('Error: Minify failed'.red);
+  exit(4);
+}
 echo('Minification completed'.green);
 
 var package = require('../package.json');

@@ -1,3 +1,16 @@
+const globals = {
+  '@angular/core': 'ng.core',
+  'rxjs': 'Rx',
+  'rxjs/operators': 'Rx.Observable.prototype',
+};
+
+const target = process.env.ROLLUP_TARGET || 'esm';
+if (target === 'esm') {
+  Object.assign(globals, {
+    'tslib': 'tslib',
+  });
+}
+
 export default {
   input: './dist/nzx-data-table.js',
   output: {
@@ -5,13 +18,6 @@ export default {
     format: 'umd',
     name: 'nzx-data-table'
   },
-  external: [
-    '@angular/core',
-    'rxjs'
-  ],
-  globals: {
-    '@angular/core': 'ng.core',
-    'rxjs': 'Rx',
-    'rxjs/Observable': 'Rx'
-  }
+  globals,
+  external: Object.keys(globals),
 }
