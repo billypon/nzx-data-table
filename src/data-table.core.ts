@@ -41,7 +41,7 @@ export class NzxDataTableCore<T = any> {
   }
 
   loadItems(state?: any): Observable<T[]> {
-    const observable = new Observable<T[]>(observer => {
+    return new Observable<T[]>(observer => {
       const oldItems = this.dataItems;
       this.dataItems = [];
       this.filteredItems = [];
@@ -67,8 +67,6 @@ export class NzxDataTableCore<T = any> {
       err => observer.error(err),
       () => observer.complete());
     }).pipe(shareReplay(1));
-    observable.subscribe();
-    return observable;
   }
 
   filterItems(filter?: any, items: T[] = this.dataItems): T[] {
