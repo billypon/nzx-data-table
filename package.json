@@ -1,7 +1,7 @@
 {
   "name": "nzx-data-table",
   "description": "data-table for ng-zorro-antd",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "bundles/nzx-data-table.umd.js",
   "module": "nzx-data-table.js",
   "typings": "nzx-data-table.d.ts",
