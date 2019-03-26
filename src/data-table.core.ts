@@ -20,7 +20,7 @@ export class NzxDataTableCore<T = any> {
   filteredItems: T[] = [];
   sortedItems: T[] = [];
 
-  loadingItems: boolean;
+  loadingItems = true;
 
   pageItems: T[];
   selectedItems: T[] = [];
