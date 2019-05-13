@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NzxDataTableCore } from 'nzx-data-table';
+import { NzxDataTable } from 'nzx-data-table';
 
 @Component({
   selector: 'nzx-data-table-demo-standalone',
@@ -34,10 +34,10 @@ import { NzxDataTableCore } from 'nzx-data-table';
 })
 
 export class NzxDataTableDemoStandaloneComponent implements OnInit {
-  dataTable: NzxDataTableCore<Person>;
+  dataTable: NzxDataTable<Person>;
 
   constructor() {
-    this.dataTable = new NzxDataTableCore({
+    this.dataTable = new NzxDataTable({
       load: () => Promise.resolve([
         new Person(1, 'foo', 20),
         new Person(2, 'bar', 15)

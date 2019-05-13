@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NzxDataTable } from 'nzx-data-table';
+import { NzxDataTableComponent } from 'nzx-data-table';
 
 @Component({
   selector: 'nzx-data-table-demo-basic',
@@ -33,7 +33,7 @@ import { NzxDataTable } from 'nzx-data-table';
   `]
 })
 
-export class NzxDataTableDemoBasicComponent extends NzxDataTable<Person> implements OnInit {
+export class NzxDataTableDemoBasicComponent extends NzxDataTableComponent<Person> implements OnInit {
   ngOnInit(): void {
     this.loadItems();
   }
