@@ -2,7 +2,7 @@ import { Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
-import { NzxDataTableFns } from './data-table.type';
+import { NzxDataTableFns } from './data-table.types';
 
 export class NzxDataTable<T = any> {
   @Input()
