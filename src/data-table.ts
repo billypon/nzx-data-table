@@ -37,7 +37,7 @@ export class NzxDataTable<T = any> {
 
   rowClickSkipTags = ['input', 'button'];
 
-  constructor(private fns: NzxDataTableFns<T>) {
+  constructor(protected fns: NzxDataTableFns<T>) {
   }
 
   loadItems(state?: any): Observable<T[]> {
@@ -131,28 +131,8 @@ export class NzxDataTable<T = any> {
     this.selectedItems = selectedItems;
   }
 
-  itemEqual(x: T, y: T): boolean {
-    return this.fns.equal ? this.fns.equal(x, y) : x === y;
-  }
-
   removeItem(item: T, items: T[] = this.dataItems): T[] {
     return items.filter(x => x !== item);
-  }
-
-  onLoadItems(state?: any): Observable<T[]> {
-    return this.fns.load ? this.fns.load(state) : of([]);
-  }
-
-  onFilterItems(filter: any, items: T[]): T[] {
-    return this.fns.filter ? this.fns.filter(filter, items) : items;
-  }
-
-  onSortItems(items: T[]): T[] {
-    return items.sort((x, y) => {
-      return this.sortValue === 'ascend' ?
-        (x[this.sortName] > y[this.sortName] ? 1 : -1) :
-        (y[this.sortName] > x[this.sortName] ? 1 : -1);
-    });
   }
 
   onCheckItem(item: T): boolean {
@@ -173,5 +153,25 @@ export class NzxDataTable<T = any> {
   onPageChange(data: T[]): void {
     this.pageItems = data;
     this.refreshStatus();
+  }
+
+  protected itemEqual(x: T, y: T): boolean {
+    return this.fns.equal ? this.fns.equal(x, y) : x === y;
+  }
+
+  protected onLoadItems(state?: any): Observable<T[]> {
+    return this.fns.load ? this.fns.load(state) : of([]);
+  }
+
+  protected onFilterItems(filter: any, items: T[]): T[] {
+    return this.fns.filter ? this.fns.filter(filter, items) : items;
+  }
+
+  protected onSortItems(items: T[]): T[] {
+    return items.sort((x, y) => {
+      return this.sortValue === 'ascend' ?
+        (x[this.sortName] > y[this.sortName] ? 1 : -1) :
+        (y[this.sortName] > x[this.sortName] ? 1 : -1);
+    });
   }
 }
