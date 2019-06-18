@@ -32,7 +32,7 @@ export class NzxDataTable<T = any> {
 
   sortName?: string;
   sortValue?: string;
-  sortMap: { [key: string]: any } = {};
+  sortMap: { [key: string]: any } = { };
 
   rowClickSkipTags = ['input', 'button'];
 
@@ -111,7 +111,7 @@ export class NzxDataTable<T = any> {
     this.refreshStatus();
   }
 
-  refreshStatus(state: { items?: T[], selectedItems?: T[] } = {}): void {
+  refreshStatus(state: { items?: T[]; selectedItems?: T[] } = { }): void {
     const items = state.items || this.pageItems || this.sortedItems;
     const selectedItems = state.selectedItems || [];
     let allChecked = !!items.length;
