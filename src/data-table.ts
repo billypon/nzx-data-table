@@ -2,7 +2,7 @@ import { Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
-import { NzxDataTableFns } from './data-table.types';
+import { NzxDataTableOpts } from './data-table.types';
 
 export class NzxDataTable<T = any> {
   @Input()
@@ -37,7 +37,12 @@ export class NzxDataTable<T = any> {
 
   rowClickSkipTags = ['input', 'button'];
 
-  constructor(protected fns: NzxDataTableFns<T>) {
+  constructor(protected opts: NzxDataTableOpts<T>) {
+    if (opts.items !== undefined) {
+      this.dataItems = opts.items;
+      this.filteredItems = opts.items;
+      this.sortedItems = opts.items;
+    }
   }
 
   loadItems(state?: any): Observable<T[]> {
@@ -92,8 +97,8 @@ export class NzxDataTable<T = any> {
 
   restoreState(item: T, oldItem: T): void {
     (item as any)[this.checkedName] = (oldItem as any)[this.checkedName];
-    if (this.fns.restore) {
-      this.fns.restore(item, oldItem);
+    if (this.opts.restore) {
+      this.opts.restore(item, oldItem);
     }
   }
 
@@ -142,8 +147,8 @@ export class NzxDataTable<T = any> {
   }
 
   onRowClick(event: Event, item: T): void {
-    if (this.fns.rowClick) {
-      this.fns.rowClick(event, item);
+    if (this.opts.rowClick) {
+      this.opts.rowClick(event, item);
     } else {
       const target = event.target as HTMLElement;
       if (this.rowClickSkipTags.indexOf(target.tagName.toLowerCase()) < 0) {
@@ -158,15 +163,15 @@ export class NzxDataTable<T = any> {
   }
 
   protected itemEqual(x: T, y: T): boolean {
-    return this.fns.equal ? this.fns.equal(x, y) : x === y;
+    return this.opts.equal ? this.opts.equal(x, y) : x === y;
   }
 
   protected onLoadItems(state?: any): Observable<T[]> {
-    return this.fns.load ? this.fns.load(state) : of([]);
+    return this.opts.load ? this.opts.load(state) : of([]);
   }
 
   protected onFilterItems(filter: any, items: T[]): T[] {
-    return this.fns.filter ? this.fns.filter(filter, items) : items;
+    return this.opts.filter ? this.opts.filter(filter, items) : items;
   }
 
   protected onSortItems(items: T[]): T[] {
