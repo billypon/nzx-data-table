@@ -20,7 +20,7 @@ export class NzxDataTable<T = any> {
   filteredItems: T[] = [];
   sortedItems: T[] = [];
 
-  loadingItems = true;
+  isLoading = true;
 
   pageItems: T[];
   selectedItems: T[] = [];
@@ -47,7 +47,7 @@ export class NzxDataTable<T = any> {
       this.filteredItems = [];
       this.sortedItems = [];
       this.pageItems = null;
-      this.loadingItems = true;
+      this.isLoading = true;
       this.onLoadItems(state).subscribe(items => {
         items.forEach(item => {
           const oldItem = oldItems.find(x => this.itemEqual(x, item));
@@ -61,7 +61,7 @@ export class NzxDataTable<T = any> {
         this.dataItems = items;
         this.filterItems(this.filterState);
         this.sortItems();
-        this.loadingItems = false;
+        this.isLoading = false;
         observer.next(this.dataItems);
       },
       err => observer.error(err),
