@@ -47,7 +47,7 @@ export class NzxDataTable<T = any> {
 
   loadItems(state?: any): Observable<T[]> {
     const observable = new Observable<T[]>(observer => {
-      const oldItems = this.dataItems;
+      const oldItems = this.dataItems || [ ];
       this.dataItems = [];
       this.filteredItems = [];
       this.sortedItems = [];
