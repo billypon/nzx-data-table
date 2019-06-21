@@ -1,5 +1,6 @@
 import { Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
 import { NzxDataTableFns } from './data-table.types';
 
@@ -40,7 +41,7 @@ export class NzxDataTable<T = any> {
   }
 
   loadItems(state?: any): Observable<T[]> {
-    return new Observable<T[]>(observer => {
+    const observable = new Observable<T[]>(observer => {
       const oldItems = this.dataItems;
       this.dataItems = [];
       this.filteredItems = [];
@@ -65,7 +66,9 @@ export class NzxDataTable<T = any> {
       },
       err => observer.error(err),
       () => observer.complete());
-    });
+    }).pipe(shareReplay(1));
+    observable.subscribe();
+    return observable;
   }
 
   filterItems(filter?: any, items: T[] = this.dataItems): T[] {
